@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import './style.css';
 
 //          interface: Input 상자 컴포넌트 Props          //
@@ -6,6 +6,8 @@ interface Props {
   label: string;
   type: 'text' | 'password';
   placeholder: string;
+  value: string;
+  setValue: Dispatch<SetStateAction<string>>
   icon?: string;
   errorMessage?: string;
   onButtonClick?: () => void;
@@ -18,6 +20,8 @@ export default function InputBox(props: Props) {
   //          state: Properties         //
   const { label, type, placeholder, icon, errorMessage } = props;
   const { onButtonClick } = props;
+
+  
 
   //          render: Input 상자 렌더링         //
   return (
