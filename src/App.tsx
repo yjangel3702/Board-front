@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import './App.css';
-import { top3ListMock } from 'mocks';
-import Top3ListItem from 'components/Top3ListItem';
+import CommentListItem from 'components/CommentListItem';
+import { commentListMock } from 'mocks';
 
 function App() {
   return (
-    <div style={{ width: '1200px', display: 'flex', justifyContent: 'space-between', gap: '24px' }}>
-      { top3ListMock.map((boardItem) => (<Top3ListItem boardItem={boardItem} />)) }
-    </div>
+    <>
+      { commentListMock.map((commentItem) => (<CommentListItem commentItem={commentItem}/>)) }
+    </>
   )
 }
 
