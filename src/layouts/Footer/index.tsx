@@ -4,6 +4,16 @@ import './style.css';
 //          component: 푸터 컴포넌트          //
 export default function Footer() {
 
+  //          event handler: 인스타 아이콘 버튼 클릭 이벤트 처리          //
+  const onIntstaIconClickHandler = () => {
+    window.location.href = 'https://www.instagram.com';
+  } // 이 방법은 새 창이 뜨지 않고 원래 창에서 바뀜
+  
+  //          event handler: 네이버 블로그 아이콘 버튼 클릭 이벤트 처리          //
+  const onNaverBlogIconClickHandler = () => {
+    window.open('https://blog.naver.com');
+  } // 이 방법은 새 창이 뜸
+
   //          render: 푸터 컴포넌트 렌더링          //
   return (
     <div id='footer'>
@@ -16,11 +26,11 @@ export default function Footer() {
         </div>
         <div className='footer-link-box'>
           <div className='email-link'>{'cats@email.com'}</div>
-          <div className='icon-button'>
+          <div className='icon-button' onClick={onIntstaIconClickHandler}>
             <div className='insta-icon'></div>
           </div>
           <div className='icon-button'>
-            <div className='naver-blog-icon'></div>
+            <div className='naver-blog-icon' onClick={onNaverBlogIconClickHandler}></div>
           </div>
         </div>
       </div>
