@@ -1,6 +1,6 @@
 import { ChangeEvent, useState, useEffect, KeyboardEvent } from 'react';
 import './style.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { MAIN_PATH, BOARD_WRITE_PATH, AUTH_PATH, SEARCH_PATH } from 'constant';
 import { BOARD_DETAIL_PATH, USER_PATH, BOARD_UPDATE_PATH } from 'constant';
 import { useCookies } from 'react-cookie';
@@ -39,7 +39,6 @@ export default function Header() {
   const onLogoClickHandler = () => {
     navigator(MAIN_PATH);
   }
-
   //          component: 검색 컴포넌트          //
   const Search = () => {
     //          state: 검색 버튼 상태          //
@@ -70,7 +69,6 @@ export default function Header() {
       }
       navigator(SEARCH_PATH(searchValue));
     }
-
     //          render: 검색 컴포넌트 렌더링 (인풋이 보임 상태일 때)          //
     if (showInput) 
     return (
@@ -101,7 +99,6 @@ export default function Header() {
     const onLoginButtonClickHandler = () => {
       navigator(AUTH_PATH);
     }
-
     //          render: 마이페이지 버튼 컴포넌트 렌더링 (로그인 상태일 때)          //
     if (cookies.cats)
     return (
@@ -112,7 +109,6 @@ export default function Header() {
       <div className='login-button' onClick={onLoginButtonClickHandler}>로그인</div>
       );
   };
-
   //          component: 업로드 버튼 컴포넌트          //
   const UploadButton = () => {
 
@@ -137,16 +133,26 @@ export default function Header() {
     //          render: 업로드 버튼 (disabel) 컴포넌트 렌더링          //
     return <div className='upload-button-disable'>업로드</div>;
   }
-
   //          component: 유저 페이지 버튼 컴포넌트          //
   const UserPageButton = () => {
 
-    //          render: 타인 페이지 일 때 버튼 컴포넌트 렌더링          //
-    //return (<LoginMyPageButton />);
-    //          render: 타인 페이지 일 때 버튼 컴포넌트 렌더링          //
-    return (<div className='logout-button'>로그아웃</div>)
-  }
+    //          state: path variable의 email 상태          //
+    const { email } = useParams();
 
+    //          variable: 마이페이지 여부 논리 변수          //
+    const isMyPage = user && user.email === email;
+
+    //          event handler: 로그아웃 버튼 클릭 이벤트 처리          //
+    const onLogoutButtonClickHandler = () => {
+      setCookies('email', '', { path: '/', expires: new Date() });
+      setUser(null);
+    }
+    //          render: 본인 페이지 일 때 버튼 컴포넌트 렌더링          //
+    if (isMyPage)
+    return (<div className='logout-button' onClick={onLogoutButtonClickHandler}>로그아웃</div>)
+    //          render: 타인 페이지 일 때 버튼 컴포넌트 렌더링          //
+    return (<LoginMyPageButton />);
+  }
   //          effect: 마운트 시에만 실행될 함수          //
   useEffect(() => {
     setCookies('cats', 'cats@email.com', { path: '/' });
