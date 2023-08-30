@@ -1,2 +1,7 @@
 import useUserStore from "./user.store";
-export { useUserStore };
+import useBoardStore from "./board.store";
+
+export { 
+  useUserStore,
+  useBoardStore
+};
