@@ -24,6 +24,7 @@ function App() {
           <Route path={BOARD_DETAIL_PATH(':bordNumber')} element={<BoardDetail />} />
           <Route path={BOARD_UPDATE_PATH(':boardNumber')} element={<BoardUpdate />} />
           <Route path={USER_PATH(':email')} element={<User />} />
+          <Route path='*' element={<h1>404 Not Found</h1>} />
         </Route>
       </Routes>
   )
