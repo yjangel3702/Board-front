@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, KeyboardEvent } from 'react';
 import './style.css';
 import InputBox from 'components/InputBox';
 import { useCookies } from 'react-cookie';
@@ -24,6 +24,9 @@ export default function Authentication() {
   //          component: sign-in 카드 컴포넌트          //
   const SignInCard = () => {
 
+    //          state: 비밀번호 입력 요소 참조 상태          //
+    const passwordRef = useRef<HTMLInputElement | null>(null);
+
     //          state: 입력한 이메일 상태          //
     const [email, setEmail] = useState<string>('');
     //          state: 입력한 비밀번호 상태          //
@@ -34,6 +37,18 @@ export default function Authentication() {
     const [passwordIcon, setPasswordIcon] = useState<'eye-off-icon' | 'eye-on-icon'>('eye-off-icon')
     //          state: 로그인 에러 상태          //
     const [error, setError] =useState<boolean>(false);
+
+    //          event handler: 이메일 인풋 key down 이벤트 처리          //
+    const onEmailKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key !== 'Enter') return;
+      if (!passwordRef.current) return;
+      passwordRef.current.focus();
+    }
+    //          event handler: 비밀번호 인풋 key down 이벤트 처리          //
+    const onPasswordKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key !== 'Enter') return;
+      onSignInButtonClickHandler();
+    }
 
     //          event handler: 비밀번호 인풋 버튼 클릭 이벤트 처리          //
     const onPasswordIconClickHandler = () => {
@@ -72,8 +87,8 @@ export default function Authentication() {
           <div className='auth-card-title-box'>
             <div className='auth-card-title'>{'로그인'}</div>
           </div>
-          <InputBox label='이메일 주소' type='text' placeholder='이메일 주소를 입력해주세요.' error={error} value={email} setValue={setEmail} />
-          <InputBox label='비밀번호' type={passwordType} placeholder='비밀번호를 입력해주세요.' error={error} value={password} setValue={setPassword} icon={passwordIcon} onButtonClick={onPasswordIconClickHandler} />
+          <InputBox label='이메일 주소' type='text' placeholder='이메일 주소를 입력해주세요.' error={error} value={email} setValue={setEmail} onKeyDown={onEmailKeyDownHandler} />
+          <InputBox ref={passwordRef} label='비밀번호' type={passwordType} placeholder='비밀번호를 입력해주세요.' error={error} value={password} setValue={setPassword} icon={passwordIcon} onKeyDown={onPasswordKeyDownHandler} onButtonClick={onPasswordIconClickHandler} />
         </div>
         <div className='auth-card-bottom'>
           {error && (
