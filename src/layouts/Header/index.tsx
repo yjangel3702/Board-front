@@ -92,6 +92,7 @@ export default function Header() {
 
     //          event handler: 마이페이지 버튼 클릭 이벤트 처리          //
     const onMyPageButtonClickHandler = () => {
+      console.log(user);
       if (!user) return;
       navigator(USER_PATH(user.email));
     }
@@ -144,7 +145,7 @@ export default function Header() {
 
     //          event handler: 로그아웃 버튼 클릭 이벤트 처리          //
     const onLogoutButtonClickHandler = () => {
-      setCookies('email', '', { path: '/', expires: new Date() });
+      setCookies('cats', '', { path: '/', expires: new Date() });
       setUser(null);
     }
     //          render: 본인 페이지 일 때 버튼 컴포넌트 렌더링          //
@@ -155,9 +156,10 @@ export default function Header() {
   }
   //          effect: 마운트 시에만 실행될 함수          //
   useEffect(() => {
-    setCookies('cats', 'cats@email.com', { path: '/' });
-    const user: LoginUser = { email: 'cats@email.com', nickname: 'Meow', profileImage: null }
-    setUser(user);
+    if (cookies.cats)  {
+      const user: LoginUser = { email: cookies.cats, nickname: 'Meow', profileImage: null }
+      setUser(user);
+    }
   }, []);
 
   //          render: 헤더 컴포넌트 렌더링          //
