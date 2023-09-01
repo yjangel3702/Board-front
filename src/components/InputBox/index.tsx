@@ -17,7 +17,7 @@ interface Props {
 }
 
 //          component: Input 상자 컴포넌트          //
-const InputBox = forwardRef((props: Props, ref) => {
+const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
 
   //          state: Properties         //
   const { label, type, error, placeholder, value, icon, errorMessage } = props;
@@ -50,3 +50,5 @@ const InputBox = forwardRef((props: Props, ref) => {
     </div>
   )
 });
+
+export default InputBox;
