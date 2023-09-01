@@ -110,6 +110,9 @@ export default function Authentication() {
   //          component: sign-up 카드 컴포넌트          //
   const SignUpCard = () => {
 
+    //          state: 페이지 번호 상태          //
+    const [page, setPage] = useState<1 | 2>(1);
+
     //          state: 이메일 상태          //
     const [email, setEmail] = useState<string>('');
     //          state: 이메일 에러 상태          //
@@ -126,6 +129,67 @@ export default function Authentication() {
     const [passwordError, setPasswordError] = useState<boolean>(false);
     //          state: 비밀번호 에러 메세지 상태          //
     const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
+    //          state: 비밀번호 확인 상태          //
+    const [passwordCheck, setPasswordCheck] = useState<string>('');
+    //          state: 비밀번호 확인 타입 상태          //
+    const [passwordCheckType, setPasswordCheckType] = useState<'text' | 'password'>('password');
+    //          state: 비밀번호 확인 아이콘 상태          //
+    const [passwordCheckIcon, setPasswordCheckIcon] = useState<'eye-on-icon' | 'eye-off-icon'>('eye-off-icon');
+    //          state: 비밀번호 확인 에러 상태          //
+    const [passwordCheckError, setPasswordCheckError] = useState<boolean>(false);
+    //          state: 비밀번호 확인 에러 메세지 상태          //
+    const [passwordCheckErrorMessage, setPasswordCheckErrorMessage] = useState<string>('');
+
+    //          event handler: 비밀번호 아이콘 클릭 이벤트 처리          //
+    const onPasswordIconClickHandler = () => {
+      if (passwordType === 'password') {
+        setPasswordType('text');
+        setPasswordIcon('eye-on-icon');
+      }
+      if (passwordType === 'text') {
+        setPasswordType('password');
+        setPasswordIcon('eye-off-icon');
+      }
+    }
+    //          event handler: 비밀번호 확인 아이콘 클릭 이벤트 처리          //
+    const onPasswordCheckIconClickHandler = () => {
+      if (passwordCheckType === 'text') {
+        setPasswordCheckType('password');
+        setPasswordCheckIcon('eye-off-icon');
+      }
+      if (passwordCheckType === 'password') {
+        setPasswordCheckType('text');
+        setPasswordCheckIcon('eye-on-icon');
+      }
+    }
+    //          event handler: 다음 단계 클릭 이벤트 처리          //
+    const onNextStepButtonClickHandler = () => {
+
+      setPasswordError(false);
+      setPasswordErrorMessage('');
+      setPasswordCheckError(false);
+      setPasswordCheckErrorMessage('');
+
+      // TODO: 이메일 패턴 확인 //
+
+      // description: 비밀번호 길이 확인 //
+      const checkedPassword = password.trim().length < 8;
+      if (checkedPassword) {
+        setPasswordError(true);
+        setPasswordErrorMessage('비밀번호는 8자 이상 입력해주세요.');
+      }
+
+      // description: 비밀번호 일치 여부 확인 //
+      const checkedPasswordCheck = password !== passwordCheck;
+      if (checkedPasswordCheck) {
+        setPasswordCheckError(true);
+        setPasswordCheckErrorMessage('비밀번호가 일치하지 않습니다.');
+      }
+
+      if (checkedPassword || checkedPasswordCheck) return;
+
+      setPage(2);
+    }
 
     //          render: sign up 카드 컴포넌트 렌더링          //
     return (
@@ -133,14 +197,14 @@ export default function Authentication() {
         <div className='auth-card-top'>
           <div className='auth-card-title-box'>
             <div className='auth-card-title'>{'회원가입'}</div>
-            <div className='auth-card-title-page'>{'1/2'}</div>
+            <div className='auth-card-title-page'>{`${page}/2`}</div>
           </div>
           <InputBox label='이메일 주소*' type='text' placeholder='이메일 주소를 입력해주세요.' value={email} setValue={setEmail} error={emailError} errorMessage={emailErrorMessage} />
-          <InputBox label='비밀번호*' type={passwordType} placeholder='비밀번호를 입력해주세요.' value={password} setValue={setPassword} icon={passwordIcon} error={passwordError} errorMessage={passwordErrorMessage} />
-          <InputBox />
+          <InputBox label='비밀번호*' type={passwordType} placeholder='비밀번호를 입력해주세요.' value={password} setValue={setPassword} icon={passwordIcon} error={passwordError} errorMessage={passwordErrorMessage} onButtonClick={onPasswordIconClickHandler} />
+          <InputBox label='비밀번호 확인*' type={passwordCheckType} placeholder='비밀번호를 다시 입력해주세요.' value={passwordCheck} setValue={setPasswordCheck} icon={passwordCheckIcon} error={passwordCheckError} errorMessage={passwordCheckErrorMessage} onButtonClick={onPasswordCheckIconClickHandler} />
         </div>
         <div className='auth-card-bottom'>
-          <div className='auth-button'>{'다음단계'}</div>
+          <div className='auth-button' onClick={onNextStepButtonClickHandler}>{'다음단계'}</div>
           <div className='auth-description-box'>
             <div className='auth-description'>{'이미 계정이 있으신가요?'}<span className='description-emphasis'>{'로그인'}</span></div>
           </div>
