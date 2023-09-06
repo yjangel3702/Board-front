@@ -62,6 +62,32 @@ export default function Main() {
       navagator(SEARCH_PATH(word));
     }
 
+    //          event handler: 페이지 번호 클릭 이벤트 처리          //
+    const onPageNumberClickHandler = (pageNumber:number) => {
+      setCurrentPageNumber(pageNumber);
+    }
+    //          event handler: 다음 버튼 클릭 이벤트 처리          //
+    const onNextButtonClickHandler = () => {
+      const TOTAL_SECTION = Math.floor((currentBoardListMock.length - 1) / 50) + 1;
+      if (currentSectionNumber === TOTAL_SECTION) {
+        alert('마지막 섹션입니다.');
+        return;
+      }
+      setCurrentPageNumber(currentSectionNumber * 10 + 1);
+      setCurrentSectionNumber(currentSectionNumber + 1);
+    }
+    //          event handler: 이전 버튼 클릭 이벤트 처리          //
+    const onPreviousButtonClickHandler = () => {
+      if (currentSectionNumber === 1) {
+        alert('첫번째 섹션입니다.');
+        return;
+      }
+      setCurrentPageNumber((currentSectionNumber - 1) * 10);
+      setCurrentSectionNumber(currentSectionNumber - 1);
+    }
+    
+
+
     //          effect: 컴포넌트 마운트 시 인기 검색어 리스트 불러오기          //
     useEffect(() => {
       // TODO: API 호출로 변경
@@ -69,6 +95,12 @@ export default function Main() {
       setLatestBoardList(currentBoardListMock);
     }, []);
 
+
+
+
+
+
+    //          effect: 현재 페이지가 변경될 시 보여줄 게시물 리스트 불러오기          //
     useEffect(() => {
 
       // const tmpList = [];
@@ -96,7 +128,7 @@ export default function Main() {
       }
 
     }, [currentPageNumber]);
-
+    //          effect: 현재 섹션이 변경될 시 보여줄 페이지 리스트 불러오기          //
     useEffect(() => {
       const FIRST_PAGE_INDEX = 10 * (currentSectionNumber - 1) + 1;
       const LAST_PAGE_INDEX = 10 * currentSectionNumber;
@@ -113,6 +145,9 @@ export default function Main() {
       setViewPageNumberList(tmpPageNumberList);
 
     }, [currentSectionNumber]);
+
+
+
 
     //          render: 메인 하단 컴포넌트 렌더링          //
     return (
@@ -131,7 +166,8 @@ export default function Main() {
                 <div className='main-bottom-popular-card-box'>
                   <div className='main-bottom-popular-card-title'>{'인기 검색어'}</div>
                   <div className='main-bottom-popular-card-contents'>
-                    { popularWordList.map(popularWord => <div className='word-badge' onClick={() => onWordBadgeClickHandler(popularWord)}>{popularWord}</div>) } 
+                    { popularWordList.map(popularWord => <div className='word-badge'
+                     onClick={() => onWordBadgeClickHandler(popularWord)}>{popularWord}</div>) } 
                   </div>
                 </div>
               </div>
@@ -139,23 +175,28 @@ export default function Main() {
           </div>
           <div className='main-bottom-pagination-box'>
             <div className='pagination-container'>
-              <div className='pagination-change-link-box'>
-                <div className='left-light-icon'></div>
+              <div className='pagination-change-link-box' onClick={onPreviousButtonClickHandler}>
+                <div className='pagination-change-link-icon-box'>
+                  <div className='left-light-icon'></div>
+                </div>
                 <div className='pagination-change-link-text'>{'이전'}</div>
               </div>
-            </div>
-            <div className='pagination-text'>{'\|'}</div>
-            { viewPageNumberList.map(pageNumber => pageNumber === currentPageNumber ? <div className='pagination-active-text'>{pageNumber}</div> : <div className='pagination-text'>{pageNumber}</div>)}
-            <div className='pagination-text'>{'\|'}</div>
-            <div className='pagination-change-link-box'>
+            <div className='pagination-divider'>{'\|'}</div>
+            { viewPageNumberList.map(pageNumber => pageNumber === currentPageNumber ? <div className='pagination-active-text'>{pageNumber}</div> 
+            : <div className='pagination-text' onClick={() => onPageNumberClickHandler(pageNumber)}> {pageNumber}</div>)}
+            <div className='pagination-divider'>{'\|'}</div>
+            <div className='pagination-change-link-box' onClick={onNextButtonClickHandler}>
               <div className='pagination-change-link-text'>{'다음'}</div>
-              <div className='right-light-icon'></div>
+              <div className='pagination-change-link-icon-box'>
+                <div className='right-light-icon'></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   //          render: 메인 페이지 렌더링          //
   return (
