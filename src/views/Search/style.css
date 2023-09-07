@@ -49,6 +49,12 @@
   gap: 24px;
 }
 
+.search-contents-result-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .search-contents-result-nothing {
   height: 416px;
 
@@ -82,8 +88,14 @@
   line-height: 140%;
 }
 
+.search-relation-card-contents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .search-relation-card-contents-nothing {
-  height: 310px;
+  height: 252px;
 
   display: flex;
   justify-content: center;
@@ -93,4 +105,11 @@
   font-size: 24px;
   font-weight: 600;
   line-height: 140%;
+}
+
+.search-pagination-box {
+  margin-top: 60px;
+
+  display: flex;
+  justify-content: center;
 }
