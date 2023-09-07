@@ -66,6 +66,8 @@ const usePagination = () => {
   useEffect(() => {
     const totalPage = Math.floor((boardList.length - 1) / 5) + 1;
     const totalSection = Math.floor((boardList.length - 1) / 50) + 1;
+    setCurrentPageNumber(1);
+    setCurrentSectionNumber(1);
     setTotalPage(totalPage);
     setTotalSection(totalSection);
 
