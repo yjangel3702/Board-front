@@ -104,3 +104,89 @@
   font-weight: 600;
   line-height: 140%;
 }
+
+#user-board-wrapper {
+  padding: 40px 0;
+
+  display: flex;
+  justify-content: center;
+
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.user-board-container {
+  width: 1200px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.user-board-title {
+  color: rgba(0, 0, 0, 1);
+
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.user-board-contents-box {
+  display: grid;
+  grid-template-columns: 8fr 4fr;
+  gap: 24px;
+}
+
+.user-board-contents-result-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.user-board-contents-nothing {
+  height: 76px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.user-board-button-box {
+  height: 76px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.user-board-button-box:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.user-board-button-contents {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-board-button-text {
+  color: rgba(0, 0, 0, 1);
+
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.user-board-pagination-box {
+  margin-top: 60px;
+
+  display: flex;
+  justify-content: center;
+}

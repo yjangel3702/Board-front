@@ -5,6 +5,7 @@ import loginInfoMock from './login-info.mock';
 import searchListMock from './search-list.mock';
 import commentListMock from './comment-list.mock';
 import favoriteListMock from './favorite-list.mock';
+import userBoardListMock from './user-board-list.mock';
 import popularWordListMock from './popular-word-list.mock';
 import currentBoardListMock from './current-board-list.mock';
 import relationWordListMock from './relation-word-list.mock';
@@ -17,6 +18,7 @@ export {
     searchListMock,
     commentListMock,
     favoriteListMock,
+    userBoardListMock,
     popularWordListMock,
     currentBoardListMock,
     relationWordListMock,
