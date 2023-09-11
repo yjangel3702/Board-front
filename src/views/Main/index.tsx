@@ -41,12 +41,10 @@ export default function Main() {
   }
   //          component: 메인 하단 컴포넌트          //
   const MainBottom = () => {
-
     //          state: 인기 검색어 리스트 상태          //
     const [popularWordList, setPopularWordList] = useState<string[]>([]);
     //          state: 페이지네이션 관련 상태          //
     const {currentPageNumber, setCurrentPageNumber, currentSectionNumber, setCurrentSectionNumber, viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination();
-    
 
     //          function: 네비게이트 함수          //
     const navagator = useNavigate();
@@ -67,9 +65,6 @@ export default function Main() {
     return (
       <div id='main-bottom-wrapper'>
         <div className='main-bottom-container'>
-
-          <button onClick={() => setCurrentPageNumber(currentPageNumber + 1)}>+</button>
-
           <div className='main-bottom-title'>{'최신 게시물'}</div>
           <div className='main-bottom-contents-box'>
             <div className='main-bottom-latest-contents-box'>
@@ -80,27 +75,26 @@ export default function Main() {
                 <div className='main-bottom-popular-card-box'>
                   <div className='main-bottom-popular-card-title'>{'인기 검색어'}</div>
                   <div className='main-bottom-popular-card-contents'>
-                    { popularWordList.map(popularWord => <div className='word-badge'
-                     onClick={() => onWordBadgeClickHandler(popularWord)}>{popularWord}</div>) } 
+                    { popularWordList.map(popularWord => <div className='word-badge' onClick={() => onWordBadgeClickHandler(popularWord)}>{popularWord}</div>) } 
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className='main-bottom-pagination-box'>
-          <Pagination 
-            currentPageNumber={currentPageNumber}
-            currentSectionNumber={currentSectionNumber}
-            setCurrentPageNumber={setCurrentPageNumber}
-            setCurrentSectionNumber={setCurrentSectionNumber}
-            viewPageNumberList={viewPageNumberList}
-            totalSection={0}
-          />
+            <Pagination
+              currentPageNumber={currentPageNumber}
+              currentSectionNumber={currentSectionNumber}
+              setCurrentPageNumber={setCurrentPageNumber}
+              setCurrentSectionNumber={setCurrentSectionNumber}
+              viewPageNumberList={viewPageNumberList}
+              totalSection={totalSection}
+            />
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   //          render: 메인 페이지 렌더링          //
   return (
