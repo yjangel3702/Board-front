@@ -13,7 +13,7 @@
  gap: 25px;
 }
 
-.user-info-profile-image-box {
+.user-info-profile-image-box-mypage {
   width: 120px;
   height: 120px;
 
@@ -22,9 +22,18 @@
   align-items: center;
 }
 
-.user-info-profile-image-box:hover {
+.user-info-profile-image-box-mypage:hover {
   opacity: 0.85;
   cursor: pointer;
+}
+
+.user-info-profile-image-box {
+  width: 120px;
+  height: 120px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .user-info-profile-default-image {
@@ -67,6 +76,21 @@
 
 .user-info-nickname {
   color: rgba(0, 0, 0, 0.7);
+
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.user-info-nickname-input {
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0;
+
+  display: inline-block;
+
+  color: rgba(0, 0, 0, 1);
 
   font-size: 24px;
   font-weight: 600;

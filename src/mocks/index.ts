@@ -1,3 +1,4 @@
+import userMock from './user.mock';
 import boardMock from './board.mock';
 import top3ListMock from './top3-list.mock';
 import loginInfoMock from './login-info.mock';
@@ -9,6 +10,7 @@ import currentBoardListMock from './current-board-list.mock';
 import relationWordListMock from './relation-word-list.mock';
 
 export {
+    userMock,
     boardMock,
     top3ListMock,
     loginInfoMock,
