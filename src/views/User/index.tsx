@@ -63,9 +63,6 @@ export default function User() {
       setEmail(email);
       setNickname(nickname);
       setProfileImage(profileImage);
-
-      const isMypage = email === user?.email;
-      setMypage(isMypage);
     }, [searchEmail]);
 
     //          render: 유저 정보 컴포넌트 렌더링          //
@@ -192,7 +189,7 @@ export default function User() {
     const isMypage = searchEmail === user?.email;
     setMypage(isMypage);
   }, [searchEmail]);
-  
+
   //          render: 유저 페이지 렌더링          //
   return (
     <>
