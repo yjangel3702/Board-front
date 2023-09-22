@@ -11,8 +11,19 @@ import BoardUpdate from 'views/Board/Update';
 import BoardWrite from 'views/Board/Write';
 import User from 'views/User';
 import Container from 'layouts/Container';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
+
+  const serverCheck = async () => {
+    const response = await axios.get("http://localhost:4000");
+    console.log(response.data);
+  }
+
+  useEffect(() => {
+    serverCheck();
+  }, []);
 
   return (
       <Routes>
