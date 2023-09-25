@@ -1,7 +1,5 @@
 import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
-import Footer from 'layouts/Footer';
-import Header from 'layouts/Header';
 import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, USER_PATH } from 'constant';
 import Main from 'views/Main';
 import Authentication from 'views/Authentication';
@@ -12,23 +10,46 @@ import BoardWrite from 'views/Board/Write';
 import User from 'views/User';
 import Container from 'layouts/Container';
 import { useEffect } from 'react';
-import axios from 'axios';
-import { error } from 'console';
+import { useCookies } from 'react-cookie';
+import { useUserStore } from 'stores';
+import { getSignInRequest } from 'apis';
+import { GetSignInUserResponseDto } from 'apis/dto/response/user';
+import ResponseDto from 'apis/dto/response';
 
 function App() {
 
-  const serverCheck = async () => {
-    const response = await axios.get("http://localhost:4000");
-    return response.data;
+  //          state: 현재 페이지 url 상태         //
+  const { pathname } = useLocation();
+  //          state: 로그인 유저 상태         //
+  const { user, setUser } = useUserStore();
+  //          state: cookie 상태          //
+  const [ cookies, setCookie ] = useCookies();
+
+  //          function: get sign in user response 처리 함수         //
+  const getSignInUserResponse = (responseBody: GetSignInUserResponseDto | ResponseDto) => {
+    const { code } = responseBody;
+    if (code !== 'SU') {
+      setCookie('accessToken', '', { expires: new Date(), path: MAIN_PATH });
+      setUser(null);
+      return;
+    }
+
+    setUser({ ...responseBody as GetSignInUserResponseDto });
+  
   }
 
+  //          effect: 현재 path가 변경될 때마다 실행될 함수         //
   useEffect(() => {
-    serverCheck()
-      .then((data) => console.log(data))
-      .catch((error) => {
-        console.log(error.response.data);
-      });
-  }, []);
+
+    const accessToken = cookies.accessToken;
+    if (!accessToken) {
+      setUser(null);
+      return;
+    }
+
+    getSignInRequest(accessToken).then(getSignInUserResponse);
+  
+  }, [pathname]);
 
   return (
       <Routes>
