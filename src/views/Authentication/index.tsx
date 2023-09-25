@@ -8,8 +8,9 @@ import { LoginUser } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { MAIN_PATH } from 'constant';
 import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
-import { signUpRequest } from 'apis';
-import { SignupRequestDto } from 'apis/dto/request/auth';
+import { SignInRequest, signUpRequest } from 'apis';
+import { SignUpRequestDto } from 'apis/dto/request/auth';
+import SignInRequestDto from 'apis/dto/request/auth/sign-in-request.dto';
 
 //          component: 인증 페이지          //
 export default function Authentication() {
@@ -67,11 +68,9 @@ export default function Authentication() {
     //          event handler: 로그인 버튼 클릭 이벤트 처리          //
     const onSignInButtonClickHandler = () => {
       // TODO: 로그인 처리 API 연결
-      const isSuccess = email === loginInfoMock.email && password === loginInfoMock.password;
-      if(!isSuccess) {
-        setError(true);
-        return;
-      }
+      const requestBody: SignInRequestDto = {email, password};
+      SignInRequest(requestBody).then();
+
       setCookie('cats', email, { path: '/' });
 
       const user: LoginUser = { email, nickname: 'Meow', profileImage: null };
@@ -315,7 +314,7 @@ export default function Authentication() {
       if (checkedNickname || checkedTellNumber || checkedAddress) return;
 
       // TODO: 회원가입 처리 및 응답 처리
-      const requestBody: SignupRequestDto = {
+      const requestBody: SignUpRequestDto = {
         email,
         password,
         nickname,
