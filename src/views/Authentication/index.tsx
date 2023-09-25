@@ -11,6 +11,8 @@ import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
 import { SignInRequest, signUpRequest } from 'apis';
 import { SignUpRequestDto } from 'apis/dto/request/auth';
 import SignInRequestDto from 'apis/dto/request/auth/sign-in-request.dto';
+import { SignInResponseDto } from 'apis/dto/response/auth';
+import ResponseDto from 'apis/dto/response';
 
 //          component: 인증 페이지          //
 export default function Authentication() {
@@ -42,6 +44,23 @@ export default function Authentication() {
     //          state: 로그인 에러 상태          //
     const [error, setError] =useState<boolean>(false);
 
+    //          function: sign in response 처리 함수          //
+    const signInResponse = (responseBody: SignInResponseDto | ResponseDto) => {
+      const { code } = responseBody;
+      if (code === 'VF') alert('모두 입력해주세요.');
+      if (code === 'SF') setError(true);
+      if (code === 'DBE') alert('데이터베이스 오류입니다.');
+      if (code !== 'SU') return;
+
+      const { token, expirationTime } = responseBody as SignInResponseDto;
+
+      const now = new Date().getTime();
+      const expires = new Date(now + expirationTime * 1000);
+
+      setCookie('accessToken', token, { expires, path: MAIN_PATH });
+      navigator(MAIN_PATH);
+    }
+
     //          event handler: 이메일 인풋 key down 이벤트 처리          //
     const onEmailKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key !== 'Enter') return;
@@ -67,15 +86,8 @@ export default function Authentication() {
     }
     //          event handler: 로그인 버튼 클릭 이벤트 처리          //
     const onSignInButtonClickHandler = () => {
-      // TODO: 로그인 처리 API 연결
       const requestBody: SignInRequestDto = {email, password};
-      SignInRequest(requestBody).then();
-
-      setCookie('cats', email, { path: '/' });
-
-      const user: LoginUser = { email, nickname: 'Meow', profileImage: null };
-      setUser(user);
-      navigator(MAIN_PATH);
+      SignInRequest(requestBody).then(signInResponse);
     }
     //          event handler: 회원가입 링크 클릭 이벤트 처리          //
     const onSignUpLinkClickHandler = () => {

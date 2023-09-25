@@ -101,7 +101,7 @@ export default function Header() {
       navigator(AUTH_PATH);
     }
     //          render: 마이페이지 버튼 컴포넌트 렌더링 (로그인 상태일 때)          //
-    if (cookies.cats)
+    if (cookies.accessToken)
     return (
       <div className='mypage-button' onClick={onMyPageButtonClickHandler}>마이페이지</div>
       );
