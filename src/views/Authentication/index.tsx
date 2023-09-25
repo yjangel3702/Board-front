@@ -112,7 +112,7 @@ export default function Authentication() {
   const SignUpCard = () => {
 
     //          state: 페이지 번호 상태          //
-    const [page, setPage] = useState<1 | 2>(2);
+    const [page, setPage] = useState<1 | 2>(1);
 
     // 1 page
     //          state: 이메일 상태          //
