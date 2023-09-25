@@ -8,6 +8,8 @@ import { LoginUser } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { MAIN_PATH } from 'constant';
 import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
+import { signUpRequest } from 'apis';
+import { SignupRequestDto } from 'apis/dto/request/auth';
 
 //          component: 인증 페이지          //
 export default function Authentication() {
@@ -168,9 +170,43 @@ export default function Authentication() {
 
     //          state: 상세 주소 상태          //
     const [addressDetail, setAddressDetail] = useState<string>('');
+
+    //          state: 개인정보동의 상태          //
+    const [consent, setConsent] = useState<boolean>(false);
+    //          state: 개인정보동의 에러 상태          //
+    const [consentError, setConsentError] = useState<boolean>(false);
     
     //          function: 다음 주소 검색 팝업 오픈 함수          //
     const open = useDaumPostcodePopup();
+    //          function: sign up response 처리 함수          //
+    const signUpResponse = (code: string) => {
+      if (code === 'VF') alert('모두 입력하세요.');
+      if (code === 'DE') {
+        setEmailError(true);
+        setEmailErrorMessage('중복되는 이메일 주소 입니다.');
+        setPage(1);
+      }
+      if (code === 'DN') {
+        setNicknameError(true);
+        setNicknameErrorMessage('중복되는 닉네임 입니다.');
+      }
+      if (code === 'DT') {
+        setTellNumberError(true);
+        setTellNumberErrorMessage('중복되는 휴대전화번호 입니다.');
+      }
+      if (code === 'DBE') alert('데이터베이스 오류입니다.');
+      if (code !== 'SU') return;
+
+      setEmail('');
+      setPassword('');
+      setNickname('');
+      setTellNumber('');
+      setAddress('');
+      setAddressDetail('');
+      setConsent(false);
+      setPage(1);
+      setView('sign-in');
+    }
 
     //          event handler: 비밀번호 아이콘 클릭 이벤트 처리          //
     const onPasswordIconClickHandler = () => {
@@ -183,15 +219,6 @@ export default function Authentication() {
         setPasswordIcon('eye-off-icon');
       }
     }
-    //          event handler: 주소 아이콘 클릭 이벤트 처리          //
-    const onAddressIconClickHandler = () => {
-      open({ onComplete });
-    }
-    //          event handler: 다음 주소 검색 완료 이벤트 처리          //
-    const onComplete = (data: Address) => {
-      const address = data.address;
-      setAddress(address);
-    }
     //          event handler: 비밀번호 확인 아이콘 클릭 이벤트 처리          //
     const onPasswordCheckIconClickHandler = () => {
       if (passwordCheckType === 'text') {
@@ -203,6 +230,20 @@ export default function Authentication() {
         setPasswordCheckIcon('eye-on-icon');
       }
     }
+    //          event handler: 주소 아이콘 클릭 이벤트 처리          //
+    const onAddressIconClickHandler = () => {
+      open({ onComplete });
+    }
+    //          event handler: 다음 주소 검색 완료 이벤트 처리          //
+    const onComplete = (data: Address) => {
+      const address = data.address;
+      setAddress(address);
+    }
+    //          event handler: 개인정보동의 체크 이벤트 처리          //
+    const onConsentCheckHandler = () => {
+      setConsent(!consent);
+    }
+
     //          event handler: 다음 단계 클릭 이벤트 처리          //
     const onNextStepButtonClickHandler = () => {
 
@@ -240,12 +281,14 @@ export default function Authentication() {
     }
     //          event handler: 회원가입 버튼 클릭 이벤트 처리          //
     const onSignUpButtonClickHandler = () => {
+
       setNicknameError(false);
       setNicknameErrorMessage('');
       setTellNumberError(false);
       setTellNumberErrorMessage('');
       setAddressError(false)
       setAddressErrorMessage('');
+      setConsentError(false);
 
       // description: 닉네임 입력 여부 확인 //
       const checkedNickname = nickname.trim().length === 0;
@@ -266,12 +309,23 @@ export default function Authentication() {
         setAddressError(true);
         setAddressErrorMessage('우편번호를 선택해주세요.')
       }
+      // description: 개인정보동의 여부 확인 //
+      if (!consent) setConsentError(true);
 
       if (checkedNickname || checkedTellNumber || checkedAddress) return;
 
       // TODO: 회원가입 처리 및 응답 처리
+      const requestBody: SignupRequestDto = {
+        email,
+        password,
+        nickname,
+        tellNumber,
+        address,
+        addressDetail,
+        agreedPersonal: consent
+      };
 
-      setView('sign-in');
+      signUpRequest(requestBody).then(signUpResponse)
       
     }
     //          render: sign up 카드 컴포넌트 렌더링          //
@@ -298,16 +352,23 @@ export default function Authentication() {
           { page === 1 && (
           <div className='auth-button' onClick={onNextStepButtonClickHandler}>{'다음단계'}</div>
           )}
-          { page === 2 && (<>
+          {page === 2 && (<>
+          <div className='auth-consent-box'>
+            <div className='auth-check-box' onClick={onConsentCheckHandler}>
+              {consent ? (<div className='check-round-fill-icon'></div>) : (<div className='check-ring-light-icon'></div>)}
+            </div>
+            <div className={consentError ? 'auth-consent-title-error' : 'auth-consent-title'}>{'개인정보동의'}</div>
+            <div className='auth-consent-link'>{'더보기>'}</div>
+          </div>
           <div className='auth-button' onClick={onSignUpButtonClickHandler}>{'회원가입'}</div>
           </>)}
           <div className='auth-description-box'>
-            <div className='auth-description'>{'이미 계정이 있으신가요?'}<span className='description-emphasis'>{'로그인'}</span></div>
+            <div className='auth-description'>{'이미 계정이 있으신가요? '}<span className='description-emphasis'>{'로그인'}</span></div>
           </div>
         </div>
       </div>
-    )
-  }
+      );
+    }
 
   //          render: 인증 페이지 렌더링          //
   return (
