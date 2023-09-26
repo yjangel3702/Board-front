@@ -8,7 +8,7 @@ import { LoginUser } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { MAIN_PATH } from 'constant';
 import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
-import { SignInRequest, signUpRequest } from 'apis';
+import { signInUserRequest, signUpRequest } from 'apis';
 import { SignUpRequestDto } from 'apis/dto/request/auth';
 import SignInRequestDto from 'apis/dto/request/auth/sign-in-request.dto';
 import { SignInResponseDto } from 'apis/dto/response/auth';
@@ -87,7 +87,7 @@ export default function Authentication() {
     //          event handler: 로그인 버튼 클릭 이벤트 처리          //
     const onSignInButtonClickHandler = () => {
       const requestBody: SignInRequestDto = {email, password};
-      SignInRequest(requestBody).then(signInResponse);
+      signInUserRequest(requestBody).then(signInResponse);
     }
     //          event handler: 회원가입 링크 클릭 이벤트 처리          //
     const onSignUpLinkClickHandler = () => {

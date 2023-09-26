@@ -3,9 +3,9 @@ import { SignUpRequestDto } from "./dto/request/auth";
 import { SignUpResponseDto } from "./dto/response/auth";
 import ResponseDto from "./dto/response";
 import SignInRequestDto from "./dto/request/auth/sign-in-request.dto";
-import { error } from "console";
 import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
 import { GetSignInUserResponseDto } from "./dto/response/user";
+import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 
 // description: API Domain 주소 //
 const API_DOAMIN = 'http://localhost:4000/api/v1';
@@ -34,7 +34,7 @@ export const signUpRequest = async (requestBody: SignUpRequestDto) => {
 };
 
 // description: sign in request //
-export const SignInUserRequest = async (requestBody: SignInRequestDto) => {
+export const signInUserRequest = async (requestBody: SignInRequestDto) => {
   const result = await axios.post(SIGN_IN_URL(), requestBody)
     .then(response => {
       const responseBody: SignInResponseDto = response.data;
@@ -49,6 +49,8 @@ export const SignInUserRequest = async (requestBody: SignInRequestDto) => {
 
 // description: get sign in user API end point //
 const GET_SIGN_IN_USER_URL = () => `${API_DOAMIN}/user`;
+// description: get user API end point //
+const GET_USER_URL = (email: string) => `${API_DOAMIN}/user/${email}`;
 
 // description: get sign in request //
 export const getSignInRequest = async (token: string) => {
@@ -61,5 +63,20 @@ export const getSignInRequest = async (token: string) => {
       const responseBody: ResponseDto = error.response.data;
       return responseBody;
     });
+  return result;
+};
+
+// description: get user request //
+export const getUserRequest = async (email: string) => {
+  const result = await axios.get(GET_USER_URL(email))
+    .then(response => {
+      const responseBody: GetUserResponseDto = response.data;
+      return responseBody;
+    })
+    .catch(error => {
+      const responseBody: ResponseDto = error.response.data;
+      return responseBody;
+    })
+
   return result;
 };
