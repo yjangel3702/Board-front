@@ -181,7 +181,7 @@ export default function Header() {
 
     //          event handler: 로그아웃 버튼 클릭 이벤트 처리          //
     const onLogoutButtonClickHandler = () => {
-      setCookies('cats', '', { path: '/', expires: new Date() });
+      setCookies('accessToken', '', { path: '/', expires: new Date() });
       setUser(null);
     }
     //          render: 본인 페이지 일 때 버튼 컴포넌트 렌더링          //

@@ -9,6 +9,9 @@ import { usePagination } from 'hooks';
 import CommentItem from 'components/CommentItem';
 import Pagination from 'components/Pagination';
 import { BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from 'constant';
+import { getBoardRequest } from 'apis';
+import { GetBoardResponseDto } from 'apis/dto/response/board';
+import ResponseDto from 'apis/dto/response';
 
 //          component: 게시물 상세보기 페이지         //
 export default function BoardDetail() {
@@ -29,6 +32,24 @@ export default function BoardDetail() {
     const [showMore, setShowMore] = useState<boolean>(false);
     //          state: 게시물 상태         //
     const [board, setBoard] = useState<Board | null>(null);
+
+    //          function: get board response 처리 함수          //
+    const getBoardResponse = (responseBody: GetBoardResponseDto | ResponseDto) => {
+      const { code } = responseBody;
+      if (code === 'NB') alert('존재하지 않는 게시물입니다.');
+      if (code === 'DBE') alert('데이터베이스 오류입니다.');
+      if (code !== 'SU') {
+        navigator(MAIN_PATH);
+        return;
+      }
+
+      const board: Board = { ...responseBody as GetBoardResponseDto };
+      setBoard(board);
+
+      if (!user) return;
+      const isWriter = user.email === board.writerEmail;
+      setWriter(isWriter);
+    }
 
     //          event handler: 작성자 클릭 이벤트 처리         //
     const onNicknameClickHandler = () => {
@@ -52,10 +73,12 @@ export default function BoardDetail() {
     
     //          effect: 게시물 번호 path variable이 바뀔 때마다 게시물 불러오기          //
     useEffect(() => {
-      setBoard(boardMock);
-      if (!user) return;
-      const isWriter = user.email === boardMock.writerEmail;
-      setWriter(isWriter);
+      if (!boardNumber) {
+        alert('잘못된 접근입니다.');
+        navigator(MAIN_PATH);
+        return;
+      }
+      getBoardRequest(boardNumber).then(getBoardResponse);
     }, [boardNumber]);
 
     //          render: 게시물 상세보기 상단 컴포넌트 렌더링         //

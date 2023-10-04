@@ -7,8 +7,8 @@ import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
 import { GetSignInUserResponseDto } from "./dto/response/user";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 import { PostBoardRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto } from "./dto/response/board";
-import GetLatestBoardListResponseDto from "./dto/response/board/get-latest-board-list.response.dto";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto } from "./dto/response/board";
+import { error } from "console";
 
 // description: Domain URL //
 const DOMAIN = 'http://localhost:4000';
@@ -52,11 +52,26 @@ export const signInUserRequest = async (requestBody: SignInRequestDto) => {
     });
   return result;
 };
-
+// description: get board API end point //
+const GET_BOARD_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}`;
 // description: get latest board list API end point //
 const GET_LATEST_BOATD_LIST_URL = () => `${API_DOAMIN}/board/latest-list`;
 // description: post board API end point //
 const POST_BOARD_URL = () => `${API_DOAMIN}/board`;
+
+// description: get board request //
+export const getBoardRequest = async (boardNumber: string | number) => {
+  const result = await axios.get(GET_BOARD_URL(boardNumber))
+    .then(response => {
+      const responseBody: GetBoardResponseDto = response.data;
+      return responseBody;
+    })
+    .catch(error => {
+      const responseBody: ResponseDto = error.response.data;
+      return responseBody;
+    });
+  return result;
+}
 
 // description: get latest board list request //
 export const getLatestBoardListRequest = async () => {
@@ -94,7 +109,6 @@ export const postBoardRequest = async (requestBody: PostBoardRequestDto, token: 
 const GET_SIGN_IN_USER_URL = () => `${API_DOAMIN}/user`;
 // description: get user API end point //
 const GET_USER_URL = (email: string) => `${API_DOAMIN}/user/${email}`;
-
 // description: get sign in request //
 export const getSignInRequest = async (token: string) => {
   const result = await axios.get(GET_SIGN_IN_USER_URL(), { headers: { Authorization: `Bearer ${token}`} })

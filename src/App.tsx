@@ -58,7 +58,7 @@ function App() {
           <Route path={AUTH_PATH} element={<Authentication />} />
           <Route path={SEARCH_PATH(':word')} element={<Search />} />
           <Route path={BOARD_WRITE_PATH} element={<BoardWrite />} />
-          <Route path={BOARD_DETAIL_PATH(':bordNumber')} element={<BoardDetail />} />
+          <Route path={BOARD_DETAIL_PATH(':boardNumber')} element={<BoardDetail />} />
           <Route path={BOARD_UPDATE_PATH(':boardNumber')} element={<BoardUpdate />} />
           <Route path={USER_PATH(':searchEmail')} element={<User />} />
           <Route path='*' element={<h1>404 Not Found</h1>} />
