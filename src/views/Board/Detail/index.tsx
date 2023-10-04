@@ -66,7 +66,7 @@ export default function BoardDetail() {
           <div className='board-detail-sub-box'>
             <div className='board-detail-write-info-box'>
               <div className='board-detail-writer-profile-image' style={{ backgroundImage: `url(${DefaultProfileImage})` }}></div>
-              <div className='board-detail-writer-nickname' onClick={onNicknameClickHandler}>{board?.nickname}</div>
+              <div className='board-detail-writer-nickname' onClick={onNicknameClickHandler}>{board?.writerNickname}</div>
               <div className='board-detail-info-divider'>{'\|'}</div>
               <div className='board-detail-write-date'>{board?.writeDatetime}</div>
             </div>
@@ -86,8 +86,8 @@ export default function BoardDetail() {
         </div>
         <div className='divider'></div>
         <div className='board-detail-top-main'>
-          <div className='board-detail-main-text'>{board?.contents}</div>
-          { board?.imageUrls.map(imageUrl => <img className='board-detail-main-image' src={imageUrl} />) }
+          <div className='board-detail-main-text'>{board?.content}</div>
+          { board?.boardImageList.map(boardImage => <img className='board-detail-main-image' src={boardImage} />) }
         </div>
       </div>
     )
