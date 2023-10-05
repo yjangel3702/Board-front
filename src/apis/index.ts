@@ -7,7 +7,7 @@ import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
 import { GetSignInUserResponseDto } from "./dto/response/user";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 import { PostBoardRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto } from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto } from "./dto/response/board";
 import { error } from "console";
 
 // description: Domain URL //
@@ -60,6 +60,8 @@ const GET_FAVORITE_LIST_URL = (boardNumber: string | number) => `${API_DOAMIN}/b
 const GET_LATEST_BOATD_LIST_URL = () => `${API_DOAMIN}/board/latest-list`;
 // description: post board API end point //
 const POST_BOARD_URL = () => `${API_DOAMIN}/board`;
+// description: put favorite API end point //
+const PUT_FAVORITE_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}/favorite`;
 
 // description: get board request //
 export const getBoardRequest = async (boardNumber: string | number) => {
@@ -120,6 +122,21 @@ export const postBoardRequest = async (requestBody: PostBoardRequestDto, token: 
   return result;
 }
 
+// description: put favorite request //
+export const putFavoriteRequest = async (boardNumber: string | number, token: string) => {
+  const result = await axios.put(PUT_FAVORITE_URL(boardNumber), {}, authorizaition(token))
+    .then(response => {
+      const responseBody: PutFavoriteResponseDto = response.data;
+      const { code } = responseBody;
+      return code;
+    })
+    .catch(error => {
+      const requestBody: ResponseDto = error.response.data;
+      const { code } = requestBody;
+      return code;
+    })
+  return result;
+}
 
 // description: get sign in user API end point //
 const GET_SIGN_IN_USER_URL = () => `${API_DOAMIN}/user`;
