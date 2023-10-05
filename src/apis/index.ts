@@ -7,7 +7,7 @@ import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
 import { GetSignInUserResponseDto } from "./dto/response/user";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 import { PostBoardRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto } from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto } from "./dto/response/board";
 import { error } from "console";
 
 // description: Domain URL //
@@ -54,6 +54,8 @@ export const signInUserRequest = async (requestBody: SignInRequestDto) => {
 };
 // description: get board API end point //
 const GET_BOARD_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}`;
+// description: get favorite list API end point //
+const GET_FAVORITE_LIST_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}/favorite-list`;
 // description: get latest board list API end point //
 const GET_LATEST_BOATD_LIST_URL = () => `${API_DOAMIN}/board/latest-list`;
 // description: post board API end point //
@@ -70,6 +72,20 @@ export const getBoardRequest = async (boardNumber: string | number) => {
       const responseBody: ResponseDto = error.response.data;
       return responseBody;
     });
+  return result;
+}
+
+// description: get favorite list request //
+export const getFavoriteListRequest = async (boardNumber: string | number) => {
+  const result = await axios.get(GET_FAVORITE_LIST_URL(boardNumber))
+    .then(response => {
+      const responseBody: GetFavoriteListResponseDto = response.data;
+      return responseBody;
+    })
+    .catch(error => {
+      const responseBody: ResponseDto = error.response.data;
+      return responseBody;
+    })
   return result;
 }
 
