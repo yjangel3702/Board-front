@@ -14,6 +14,7 @@ import { GetBoardResponseDto, GetCommentListResponseDto, GetFavoriteListResponse
 import ResponseDto from 'apis/dto/response';
 import { useCookies } from 'react-cookie';
 import { PostCommentRequesDto } from 'apis/dto/request/board';
+import dayjs from 'dayjs';
 
 //          component: 게시물 상세보기 페이지         //
 export default function BoardDetail() {
@@ -37,6 +38,12 @@ export default function BoardDetail() {
     //          state: 게시물 상태         //
     const [board, setBoard] = useState<Board | null>(null);
 
+    //          function: 작성일 포멧 변경 함수         //
+    const getWriteDatetimeFormat = (writeDatetime: string | undefined) => {
+      if (!writeDatetime) return '';
+      const date = dayjs(writeDatetime);
+      return date.format('YYYY. MM. DD');
+    }
     //          function: get board response 처리 함수          //
     const getBoardResponse = (responseBody: GetBoardResponseDto | ResponseDto) => {
       const { code } = responseBody;
@@ -95,7 +102,7 @@ export default function BoardDetail() {
               <div className='board-detail-writer-profile-image' style={{ backgroundImage: `url(${DefaultProfileImage})` }}></div>
               <div className='board-detail-writer-nickname' onClick={onNicknameClickHandler}>{board?.writerNickname}</div>
               <div className='board-detail-info-divider'>{'\|'}</div>
-              <div className='board-detail-write-date'>{board?.writeDatetime}</div>
+              <div className='board-detail-write-date'>{getWriteDatetimeFormat(board?.writeDatetime)}</div>
             </div>
             {isWriter && (
             <div className='icon-button' onClick={onMoreButtonClickHandler}>
@@ -188,6 +195,7 @@ export default function BoardDetail() {
       if (code === 'DBE') alert('데이터베이스 오류입니다.');
       if (code !== 'SU') return;
 
+      setComment('');
       if (!boardNumber) return;
       getCommentListRequest(boardNumber).then(getCommentListResponse);
     }
@@ -309,7 +317,7 @@ export default function BoardDetail() {
           <div className='board-detail-bottom-comments-input-box'>
             <div className='board-detail-bottom-comments-input-container'>
               <textarea ref={textareaRef} className='board-detail-bottom-comments-input' placeholder='댓글을 작성해주세요.' value={comment} onChange={onCommentChangeHandler} />
-              <div className='board-detail-bottom-comments-button-box'>
+              <div className='board-detail-bottom-comments-button-box' onClick={onCommentButtonClickHandler}>
                 {comment.length === 0 ? (<div className='board-detail-bottom-comments-button-disable'>{'댓글달기'}</div>) : (<div className='board-detail-bottom-comments-button'>{'댓글달기'}</div>)}
               </div>
             </div>
