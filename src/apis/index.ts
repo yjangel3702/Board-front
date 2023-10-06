@@ -6,8 +6,8 @@ import SignInRequestDto from "./dto/request/auth/sign-in-request.dto";
 import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
 import { GetSignInUserResponseDto } from "./dto/response/user";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
-import { PostBoardRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto } from "./dto/response/board";
+import { PostBoardRequestDto, PostCommentRequesDto } from "./dto/request/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto } from "./dto/response/board";
 import { error } from "console";
 
 // description: Domain URL //
@@ -54,8 +54,12 @@ export const signInUserRequest = async (requestBody: SignInRequestDto) => {
 };
 // description: get board API end point //
 const GET_BOARD_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}`;
+// description: post comment API end point //
+const POST_COMMENT_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}/comment`;
 // description: get favorite list API end point //
 const GET_FAVORITE_LIST_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}/favorite-list`;
+// description: get comment list API end point //
+const GET_COMMENT_LIST_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}/comment-list`;
 // description: get latest board list API end point //
 const GET_LATEST_BOATD_LIST_URL = () => `${API_DOAMIN}/board/latest-list`;
 // description: post board API end point //
@@ -91,6 +95,20 @@ export const getFavoriteListRequest = async (boardNumber: string | number) => {
   return result;
 }
 
+// description: get comment list request //
+export const getCommentListRequest = async (boardNumber: string | number) => {
+  const result = await axios.get(GET_COMMENT_LIST_URL(boardNumber))
+      .then(response => {
+          const responseBody: GetCommentListResponseDto = response.data;
+          return responseBody;
+      })
+      .catch(error => {
+          const responseBody: ResponseDto = error.response.data;
+          return responseBody;
+      });
+  return result;
+};
+
 // description: get latest board list request //
 export const getLatestBoardListRequest = async () => {
   const result = await axios.get(GET_LATEST_BOATD_LIST_URL())
@@ -120,6 +138,23 @@ export const postBoardRequest = async (requestBody: PostBoardRequestDto, token: 
       return code;
     });
   return result;
+}
+
+// description: post comment request //
+export const postCommentRequest = async (requestBody: PostCommentRequesDto, boardNumber: string, token: string) => {
+  const result = await axios.post(POST_COMMENT_URL(boardNumber), requestBody, authorizaition(token))
+    .then(response => {
+      const responseBody: PostCommentResponseDto = response.data;
+      const { code } = responseBody;
+      return code;
+    })
+    .catch(error => {
+      const responseBody: ResponseDto = error.response.data;
+      const { code } = responseBody;
+      return code;
+    })
+  return result;
+  
 }
 
 // description: put favorite request //
