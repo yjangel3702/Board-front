@@ -6,8 +6,8 @@ import SignInRequestDto from "./dto/request/auth/sign-in-request.dto";
 import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
 import { GetSignInUserResponseDto } from "./dto/response/user";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
-import { PostBoardRequestDto, PostCommentRequesDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto } from "./dto/response/board";
+import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequesDto } from "./dto/request/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto } from "./dto/response/board";
 import { error } from "console";
 
 // description: Domain URL //
@@ -66,6 +66,8 @@ const GET_LATEST_BOATD_LIST_URL = () => `${API_DOAMIN}/board/latest-list`;
 const POST_BOARD_URL = () => `${API_DOAMIN}/board`;
 // description: put favorite API end point //
 const PUT_FAVORITE_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}/favorite`;
+// description: patch board API end point //
+const PATCH_BOARD_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}`;
 
 // description: get board request //
 export const getBoardRequest = async (boardNumber: string | number) => {
@@ -170,6 +172,22 @@ export const putFavoriteRequest = async (boardNumber: string | number, token: st
       const { code } = requestBody;
       return code;
     })
+  return result;
+}
+
+// description: patch board request //
+export const patchBoardRequest = async (requestBody: PatchBoardRequestDto, boardNumber: string | number, token: string) => {
+  const result = await axios.patch(PATCH_BOARD_URL(boardNumber), requestBody, authorizaition(token))
+    .then(response => {
+      const responseBody: PatchBoardResponseDto = response.data;
+      const { code } = responseBody;
+      return code;
+    })
+    .catch(error => {
+      const responseBody: ResponseDto = error.response.data;
+      const { code } = responseBody;
+      return code;
+    });
   return result;
 }
 
