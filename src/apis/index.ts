@@ -8,6 +8,7 @@ import { GetSignInUserResponseDto } from "./dto/response/user";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequesDto } from "./dto/request/board";
 import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto } from "./dto/response/board";
+import IncreaseViewCounstResponseDto from "./dto/response/board/increase-view-count.response.dto";
 
 // description: Domain URL //
 const DOMAIN = 'http://localhost:4000';
@@ -69,6 +70,8 @@ const POST_BOARD_URL = () => `${API_DOAMIN}/board`;
 const PUT_FAVORITE_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}/favorite`;
 // description: patch board API end point //
 const PATCH_BOARD_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}`;
+// descriptionL increase view count API end point //
+const INCRESE_VIEW_COUNT_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/increase-view-count/${boardNumber}`;
 // description: delete board API end point //
 const DELETE_BOARD_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}`;
 
@@ -197,6 +200,22 @@ export const patchBoardRequest = async (requestBody: PatchBoardRequestDto, board
   const result = await axios.patch(PATCH_BOARD_URL(boardNumber), requestBody, authorizaition(token))
     .then(response => {
       const responseBody: PatchBoardResponseDto = response.data;
+      const { code } = responseBody;
+      return code;
+    })
+    .catch(error => {
+      const responseBody: ResponseDto = error.response.data;
+      const { code } = responseBody;
+      return code;
+    });
+  return result;
+}
+
+// description: increase view count request //
+export const increaseViewCountRequest = async (boardNumber: string | number) => {
+  const result = await axios.patch(INCRESE_VIEW_COUNT_URL(boardNumber))
+    .then(response => {
+      const responseBody: IncreaseViewCounstResponseDto = response.data;
       const { code } = responseBody;
       return code;
     })
