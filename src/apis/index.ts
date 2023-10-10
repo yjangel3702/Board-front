@@ -7,8 +7,7 @@ import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
 import { GetSignInUserResponseDto } from "./dto/response/user";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequesDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto } from "./dto/response/board";
-import { error } from "console";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto } from "./dto/response/board";
 
 // description: Domain URL //
 const DOMAIN = 'http://localhost:4000';
@@ -68,6 +67,8 @@ const POST_BOARD_URL = () => `${API_DOAMIN}/board`;
 const PUT_FAVORITE_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}/favorite`;
 // description: patch board API end point //
 const PATCH_BOARD_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}`;
+// description: delete board API end point //
+const DELETE_BOARD_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}`;
 
 // description: get board request //
 export const getBoardRequest = async (boardNumber: string | number) => {
@@ -168,8 +169,8 @@ export const putFavoriteRequest = async (boardNumber: string | number, token: st
       return code;
     })
     .catch(error => {
-      const requestBody: ResponseDto = error.response.data;
-      const { code } = requestBody;
+      const responseBody: ResponseDto = error.response.data;
+      const { code } = responseBody;
       return code;
     })
   return result;
@@ -188,6 +189,22 @@ export const patchBoardRequest = async (requestBody: PatchBoardRequestDto, board
       const { code } = responseBody;
       return code;
     });
+  return result;
+}
+
+// description: delete board request //
+export const deleteBoardRequest = async (boardNumber: string | number, token: string) => {
+  const result = await axios.delete(DELETE_BOARD_URL(boardNumber), authorizaition(token))
+    .then(response => {
+      const responseBody: DeleteBoardResponseDto = response.data;
+      const { code } = responseBody;
+      return code;
+    })
+    .catch(error => {
+      const responseBody: ResponseDto = error.response.data;
+      const { code } = responseBody;
+      return code;
+    })
   return result;
 }
 
