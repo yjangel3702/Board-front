@@ -7,7 +7,7 @@ import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
 import { GetSignInUserResponseDto } from "./dto/response/user";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequesDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto } from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto } from "./dto/response/board";
 
 // description: Domain URL //
 const DOMAIN = 'http://localhost:4000';
@@ -61,6 +61,8 @@ const GET_FAVORITE_LIST_URL = (boardNumber: string | number) => `${API_DOAMIN}/b
 const GET_COMMENT_LIST_URL = (boardNumber: string | number) => `${API_DOAMIN}/board/${boardNumber}/comment-list`;
 // description: get latest board list API end point //
 const GET_LATEST_BOATD_LIST_URL = () => `${API_DOAMIN}/board/latest-list`;
+// description: get user board list API end point //
+const GET_USER_BOARD_LIST_URL = (email: string) => `${API_DOAMIN}/board/user-board-list/${email}`;
 // description: post board API end point //
 const POST_BOARD_URL = () => `${API_DOAMIN}/board`;
 // description: put favorite API end point //
@@ -118,6 +120,20 @@ export const getLatestBoardListRequest = async () => {
     .then(response => {
       const responseBody: GetLatestBoardListResponseDto = response.data;
       return responseBody
+    })
+    .catch(error => {
+      const responseBody: ResponseDto = error.response.data;
+      return responseBody;
+    });
+  return result;
+};
+
+// description: get user board list request //
+export const getUserBoardListRequest = async (email: string) => {
+  const result = await axios.get(GET_USER_BOARD_LIST_URL(email))
+    .then(response => {
+      const responseBody: GetUserBoardListResponseDto = response.data;
+      return responseBody;
     })
     .catch(error => {
       const responseBody: ResponseDto = error.response.data;
