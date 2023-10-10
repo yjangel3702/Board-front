@@ -4,11 +4,12 @@ import { SignUpResponseDto } from "./dto/response/auth";
 import ResponseDto from "./dto/response";
 import SignInRequestDto from "./dto/request/auth/sign-in-request.dto";
 import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
-import { GetSignInUserResponseDto } from "./dto/response/user";
+import { GetSignInUserResponseDto, PatchNicknameResponseDto } from "./dto/response/user";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequesDto } from "./dto/request/board";
 import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto } from "./dto/response/board";
 import IncreaseViewCounstResponseDto from "./dto/response/board/increase-view-count.response.dto";
+import { patchNicknameRequestDto } from "./dto/request/user";
 
 // description: Domain URL //
 const DOMAIN = 'http://localhost:4000';
@@ -247,6 +248,8 @@ export const deleteBoardRequest = async (boardNumber: string | number, token: st
 const GET_SIGN_IN_USER_URL = () => `${API_DOAMIN}/user`;
 // description: get user API end point //
 const GET_USER_URL = (email: string) => `${API_DOAMIN}/user/${email}`;
+// description: patch nickname API end point //
+const PATCH_NICKNAME_URL = () => `${API_DOAMIN}/user/nickname`;
 // description: get sign in request //
 export const getSignInRequest = async (token: string) => {
   const result = await axios.get(GET_SIGN_IN_USER_URL(), { headers: { Authorization: `Bearer ${token}`} })
@@ -260,7 +263,6 @@ export const getSignInRequest = async (token: string) => {
     });
   return result;
 };
-
 // description: get user request //
 export const getUserRequest = async (email: string) => {
   const result = await axios.get(GET_USER_URL(email))
@@ -275,6 +277,21 @@ export const getUserRequest = async (email: string) => {
 
   return result;
 };
+// description: patch nickname request //
+export const patchNicknameRequest = async (requestBody: patchNicknameRequestDto, token: string) => {
+  const result = await axios.patch(PATCH_NICKNAME_URL(), requestBody, authorizaition(token))
+    .then(response => {
+      const responseBody: PatchNicknameResponseDto = response.data;
+      const { code } = responseBody;
+      return code;
+    })
+    .catch(error => {
+      const responseBody: ResponseDto = error.response.data;
+      const { code } = responseBody;
+      return code;
+    })
+  return result;
+}
 
 // description: File Domain 주소 //
 const FILE_DOMAIN = `${DOMAIN}/file`;
