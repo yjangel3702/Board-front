@@ -8,7 +8,7 @@ import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDt
 import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from './dto/request/user';
 
 // description: Domain URL //
-const DOMAIN = 'http://localhost:4000';
+const DOMAIN = 'http://52.78.61.36:4000';
 
 // description: API Domain 주소 //
 const API_DOAMIN = `${DOMAIN}/api/v1`;
