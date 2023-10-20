@@ -1,3 +1,3 @@
-export default interface patchNicknameRequestDto {
+export default interface PatchNicknameRequestDto {
   nickname: string;
 }

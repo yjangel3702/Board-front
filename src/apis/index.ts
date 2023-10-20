@@ -1,15 +1,11 @@
 import axios from "axios";
-import { SignUpRequestDto } from "./dto/request/auth";
-import { SignUpResponseDto } from "./dto/response/auth";
+import { SignUpRequestDto, SignInRequestDto } from "./dto/request/auth";
+import { SignUpResponseDto, SignInResponseDto } from "./dto/response/auth";
 import ResponseDto from "./dto/response";
-import SignInRequestDto from "./dto/request/auth/sign-in-request.dto";
-import SignInResponseDto from "./dto/response/auth/sign-in-response.dto";
-import { GetSignInUserResponseDto, PatchNicknameResponseDto } from "./dto/response/user";
-import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
+import { GetSignInUserResponseDto, GetUserResponseDto, PatchNicknameResponseDto, PatchProfileImageResponseDto } from "./dto/response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequesDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto } from "./dto/response/board";
-import IncreaseViewCounstResponseDto from "./dto/response/board/increase-view-count.response.dto";
-import { patchNicknameRequestDto } from "./dto/request/user";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto, GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto } from "./dto/response/board";
+import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from './dto/request/user';
 
 // description: Domain URL //
 const DOMAIN = 'http://localhost:4000';
@@ -216,7 +212,7 @@ export const patchBoardRequest = async (requestBody: PatchBoardRequestDto, board
 export const increaseViewCountRequest = async (boardNumber: string | number) => {
   const result = await axios.patch(INCRESE_VIEW_COUNT_URL(boardNumber))
     .then(response => {
-      const responseBody: IncreaseViewCounstResponseDto = response.data;
+      const responseBody: IncreaseViewCountResponseDto = response.data;
       const { code } = responseBody;
       return code;
     })
@@ -250,6 +246,9 @@ const GET_SIGN_IN_USER_URL = () => `${API_DOAMIN}/user`;
 const GET_USER_URL = (email: string) => `${API_DOAMIN}/user/${email}`;
 // description: patch nickname API end point //
 const PATCH_NICKNAME_URL = () => `${API_DOAMIN}/user/nickname`;
+// description: patch profile image API end point //
+const PATCH_PROFILE_IMAGE_URL = () => `${API_DOAMIN}/user/profile-image`;
+
 // description: get sign in request //
 export const getSignInRequest = async (token: string) => {
   const result = await axios.get(GET_SIGN_IN_USER_URL(), { headers: { Authorization: `Bearer ${token}`} })
@@ -278,7 +277,7 @@ export const getUserRequest = async (email: string) => {
   return result;
 };
 // description: patch nickname request //
-export const patchNicknameRequest = async (requestBody: patchNicknameRequestDto, token: string) => {
+export const patchNicknameRequest = async (requestBody: PatchNicknameRequestDto, token: string) => {
   const result = await axios.patch(PATCH_NICKNAME_URL(), requestBody, authorizaition(token))
     .then(response => {
       const responseBody: PatchNicknameResponseDto = response.data;
@@ -290,6 +289,21 @@ export const patchNicknameRequest = async (requestBody: patchNicknameRequestDto,
       const { code } = responseBody;
       return code;
     })
+  return result;
+}
+// description: patch profile image request //
+export const patchProfileImageRequest = async (requestBody: PatchProfileImageRequestDto, token: string) => {
+  const result = await axios.patch(PATCH_PROFILE_IMAGE_URL(), requestBody, authorizaition(token))
+      .then(response => {
+          const responseBody: PatchProfileImageResponseDto = response.data;
+          const { code } = responseBody;
+          return code;
+      })
+      .catch(error => {
+          const responseBody: ResponseDto = error.response.data;
+          const { code } = responseBody;
+          return code;
+      });
   return result;
 }
 
